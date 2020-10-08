@@ -1,68 +1,68 @@
 <html>
   <head>
-      <title>Chat</title>
-      <style>
-        div.chat > div {
-          width: 50px;
-          height: auto;
-          border-color: black;
-        }
-      </style>
-      <script>
-        //function for sending messages to chat
-        function sendMessage(text) {
-          const divMessage = document.createElement('div');
-          divMessage.innerHTML = `<p>${text}</p>`;
-          chat.appendChild(divMessage);
-        }
+    <title>Chat</title>
+    <style>
+      div.chat > div {
+        width: 50px;
+        height: auto;
+        border-color: black;
+      }
+    </style>
+    <script>
 
+      //function for sending messages to chat
+      function sendMessage(text) {
+        const divMessage = document.createElement('div');
+        divMessage.innerHTML = `<p>${text.name + ': ' + text.message}</p>`;
+        chat.appendChild(divMessage);
+      }
 
-        document.addEventListener('DOMContentLoaded', () => {
-          const socket = new WebSocket('ws://localhost:8000/'); 
+      document.addEventListener('DOMContentLoaded', () => {
 
-          //elements of html
-          const submitButton = document.getElementById('submit');
-          const submitMessage = document.getElementById('submit-message');
-          const chat = document.getElementById('chat');
-          const message = document.getElementById('message');
-          const nickname = document.getElementById('nickname');
+        const socket = new WebSocket('ws://localhost:8000/'); 
 
-          //submit nickname
-          submitButton.addEventListener('click', event => {
-            event.preventDefault();
-            const name = nickname.value;
-            socket.send(nickname);
-          });
+        //elements of html
+        const submitMessage = document.getElementById('submit-message');
+        const chat = document.getElementById('chat');
+        const message = document.getElementById('message');
+        const nickname = document.getElementById('nickname');
 
-          //send message
-          submitMessage.addEventListener('click', event => {
-            event.preventDefault();
-            const text = message.value;
-            message.value = '';
-            sendMessage(text);
-            const name = nickname.value;
-            socket.send(JSON.stringify({name: name, message: text}));
-          });
+        //send message
+        submitMessage.addEventListener('click', event => {
+          event.preventDefault();
 
-          socket.onmessage = event => {
-            const text = event.data;
-            sendMessage(text);
-          };
+          const text = {
+            name: nickname.value,
+            message: message.value,
+          }
+
+          message.value = '';
+          socket.send(JSON.stringify(text));
+          text.name = 'You';
+          sendMessage(text);
         });
-      </script>
+
+        //get message
+        socket.onmessage = event => {
+          const message = event.data;
+          const text = JSON.parse(message);
+          sendMessage(text);
+        };
+
+      });
+    </script>
   </head>
 
   <body>
-      <form>
-        <label for="nickname">Nickname:</label>
-        <input type="text" name="nickname" id="nickname">
-        <button type="submit" id="submit">Approve</button>
+    <form>
+      <label for="nickname">Nickname:</label>
+      <input type="text" name="nickname" id="nickname">
 
-        <input type="text" name="message" id="message">
-        <button type="submit" id="submit-message">Submit message</button>
+      <input type="text" name="message" id="message">
+      <button type="submit" id="submit-message">Submit message</button>
 
         
-      </form>
-      <div id="chat"></div>
+    </form>
+    <div id="chat"></div>
   </body>
 </html>
