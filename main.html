@@ -1,0 +1,68 @@
+<html>
+  <head>
+      <title>Chat</title>
+      <style>
+        div.chat > div {
+          width: 50px;
+          height: auto;
+          border-color: black;
+        }
+      </style>
+      <script>
+        //function for sending messages to chat
+        function sendMessage(text) {
+          const divMessage = document.createElement('div');
+          divMessage.innerHTML = `<p>${text}</p>`;
+          chat.appendChild(divMessage);
+        }
+
+
+        document.addEventListener('DOMContentLoaded', () => {
+          const socket = new WebSocket('ws://localhost:8000/'); 
+
+          //elements of html
+          const submitButton = document.getElementById('submit');
+          const submitMessage = document.getElementById('submit-message');
+          const chat = document.getElementById('chat');
+          const message = document.getElementById('message');
+          const nickname = document.getElementById('nickname');
+
+          //submit nickname
+          submitButton.addEventListener('click', event => {
+            event.preventDefault();
+            const name = nickname.value;
+            socket.send(nickname);
+          });
+
+          //send message
+          submitMessage.addEventListener('click', event => {
+            event.preventDefault();
+            const text = message.value;
+            message.value = '';
+            sendMessage(text);
+            const name = nickname.value;
+            socket.send(JSON.stringify({name: name, message: text}));
+          });
+
+          socket.onmessage = event => {
+            const text = event.data;
+            sendMessage(text);
+          };
+        });
+      </script>
+  </head>
+
+  <body>
+      <form>
+        <label for="nickname">Nickname:</label>
+        <input type="text" name="nickname" id="nickname">
+        <button type="submit" id="submit">Approve</button>
+
+        <input type="text" name="message" id="message">
+        <button type="submit" id="submit-message">Submit message</button>
+
+        
+      </form>
+      <div id="chat"></div>
+  </body>
+</html>
