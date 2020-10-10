@@ -3,6 +3,7 @@
 const http = require('http');
 const fs = require('fs');
 const WebSocket = require('ws');
+const mysql = require('mysql');
 
 //this function asyncronously reads file
 function readFileInfo(file) {
@@ -55,20 +56,22 @@ const ws = new WebSocket.Server({server});
 
 ws.on('connection', (connection, req) => {
   const ip = req.socket.remoteAddress;
-  console.log(`Connected ${ip}`);
+  //console.log(connection);
 
   connection.on('message', message => {
-    console.log(message);
-    ws.clients.forEach(function each(client) {
-      if (client !== connection && client.readyState === WebSocket.OPEN) {
-        client.send(message);
-      }
-    });
+    const type = JSON.parse(message).type;
+    if (type == 'sendMessage' || type == 'createGroup') {
+      ws.clients.forEach(function each(client) {
+        if (client !== connection && client.readyState === WebSocket.OPEN) {
+          client.send(message);
+        }
+      });
+    } else {}
+    
   });
   
   connection.on('close', () => {
     console.log(`Disconnected ${ip}`);
   });
 });
-
 

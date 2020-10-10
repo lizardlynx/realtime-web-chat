@@ -1,14 +1,9 @@
 <html>
   <head>
     <title>Chat</title>
-    <style>
-      div.chat > div {
-        width: 50px;
-        height: auto;
-        border-color: black;
-      }
-    </style>
     <script>
+
+      //function press
 
       //function for sending messages to chat
       function sendMessage(text) {
@@ -17,21 +12,50 @@
         chat.appendChild(divMessage);
       }
 
+      //function for creating groups
+      function createGroup(group) {
+        const buttonGroup = document.createElement('button');
+        buttonGroup.innerHTML = `<p>${group.name}</p>`;
+        groups.appendChild(buttonGroup);
+        buttonGroup.addEventListener('click', event => {
+            //open dialog
+            console.log(group.name);
+          });
+      }
+
       document.addEventListener('DOMContentLoaded', () => {
 
         const socket = new WebSocket('ws://localhost:8000/'); 
 
         //elements of html
-        const submitMessage = document.getElementById('submit-message');
-        const chat = document.getElementById('chat');
-        const message = document.getElementById('message');
         const nickname = document.getElementById('nickname');
+        const message = document.getElementById('message');
+        const submitButton = document.getElementById('submit-message');
+        const group = document.getElementById('group');
+        const createButton = document.getElementById('create-group');
+        const groups = document.getElementById('groups');
+        const chat = document.getElementById('chat');
+
+        //create group
+        createButton.addEventListener('click', event => {
+          event.preventDefault();
+          
+          const message = {
+            type: 'createGroup',
+            name: nickname.value,
+            name: group.value,
+          }
+
+          socket.send(JSON.stringify(message));
+          createGroup(message);
+        });
 
         //send message
-        submitMessage.addEventListener('click', event => {
+        submitButton.addEventListener('click', event => {
           event.preventDefault();
 
           const text = {
+            type: 'sendMessage',
             name: nickname.value,
             message: message.value,
           }
@@ -42,11 +66,16 @@
           sendMessage(text);
         });
 
-        //get message
+        //get message from server
         socket.onmessage = event => {
           const message = event.data;
           const text = JSON.parse(message);
-          sendMessage(text);
+          const type = text.type;
+          if (type == "sendMessage") {
+            sendMessage(text);
+          } else if (type == "createGroup") {
+            createGroup(text);
+          } 
         };
 
       });
@@ -58,11 +87,17 @@
       <label for="nickname">Nickname:</label>
       <input type="text" name="nickname" id="nickname">
 
+      <label for="group">Create a group (enter its name):</label>
+      <input type="text" name="group" id="group">
+      <button type="submit" id="create-group">Create group</button>
+      
+
       <input type="text" name="message" id="message">
       <button type="submit" id="submit-message">Submit message</button>
 
         
     </form>
+    <div id="groups"></div>
     <div id="chat"></div>
   </body>
 </html>
