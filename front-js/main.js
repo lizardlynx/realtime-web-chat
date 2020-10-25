@@ -2,17 +2,18 @@
 
 //function for sending messages to chat
 function sendMessage(message) {
-  const divMessage = document.createElement('div');
-  message.message = message.message.replace(/\r\n/g, '<br />').replace(/[\r\n]/g, '<br />');
-  divMessage.innerHTML = `<p>${message.name + ': ' + message.message}</p>`;
-  chat.appendChild(divMessage);
-
+  const section = document.createElement('section');
+  section.classList.add('message-section');
   const avatarPicture = new Image();
-  console.log(message.avatar instanceof Blob);
-  let objectURL = message.avatar;//URL.createObjectURL(message.avatar); //'../images/anonymous.jpeg';
   avatarPicture.classList.add('avatar');
-  avatarPicture.src = objectURL;
-  divMessage.appendChild(avatarPicture);
+  avatarPicture.setAttribute('src', message.avatar);
+  section.appendChild(avatarPicture);
+
+  const divMessage = document.createElement('div');
+  message.message = message.message;
+  divMessage.innerHTML = `<p>${message.name + ': ' + message.message}</p>`;
+  section.appendChild(divMessage);
+  chat.appendChild(section);
 }
 
 //function for creating groups
@@ -27,15 +28,14 @@ function createGroup(group) {
 }
 
 //img to data url
-function getBase64Image(img) {
-  const canvas = document.createElement("canvas");
-  canvas.width = img.width;
-  canvas.height = img.height;
-  const ctx = canvas.getContext("2d");
-  ctx.drawImage(img, 0, 0);
-  const dataURL = canvas.toDataURL("image/jpeg");
-  return dataURL;//.replace(/^data:image\/(png|jpg);base64,/, "");
-}
+const toDataURL = url => fetch(url)
+.then(response => response.blob())
+.then(blob => new Promise((resolve, reject) => {
+  const reader = new FileReader();
+  reader.onloadend = () => resolve(reader.result);
+  reader.onerror = reject;
+  reader.readAsDataURL(blob);
+}));
 
 document.addEventListener('DOMContentLoaded', () => {
 
@@ -97,15 +97,16 @@ document.addEventListener('DOMContentLoaded', () => {
       avatar: '',
     }
 
-    const dataUrl = getBase64Image(avatar);
-
-    text.avatar = dataUrl;
-    messageInput.value = '';
-    if (!text.name) text.name = 'unknown';
-    socket.send(JSON.stringify(text));
-    text.name = 'You';
-    sendMessage(text);
-    console.log(text);
+    toDataURL(avatar.src)
+    .then(dataUrl => {
+      text.avatar = dataUrl;
+      messageInput.value = '';
+      if (!text.name) text.name = 'unknown';
+      socket.send(JSON.stringify(text));
+      text.name = 'You';
+      sendMessage(text);
+      console.log(text);
+    });
 
   });
 
@@ -121,7 +122,4 @@ document.addEventListener('DOMContentLoaded', () => {
       createGroup(text);
     } 
   };
-
-  
-
 });
