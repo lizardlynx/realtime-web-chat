@@ -37,6 +37,7 @@ const mime = {
   'css': 'text/css',
   'png': 'image/png',
   'ico': 'image/x-icon',
+  'jpeg': 'image/jpeg',
 };
 
 //handle request in http server
@@ -77,6 +78,7 @@ ws.on('connection', (connection, req) => {
 
   connection.on('message', message => {
     const type = JSON.parse(message).type;
+    console.log(typeof message, message);
     if (type == 'sendMessage' || type == 'createGroup') {
       ws.clients.forEach(function each(client) {
         if (client !== connection && client.readyState === WebSocket.OPEN) {

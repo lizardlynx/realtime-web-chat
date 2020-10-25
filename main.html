@@ -12,11 +12,7 @@
     <!--input section-->
     <form>
 
-      <!--nickname-->
-      <!--<section id="nickname-input">
-        <label for="nickname">Nickname:</label>
-        <input type="text" name="nickname" id="nickname">
-      </section>-->
+      
 
       <!--group-->
       <!--<section>
@@ -25,15 +21,27 @@
         <button type="submit" id="create-group">Create group</button>
       </section>-->
       
-      <!--message-->
-      <section id="message-input">
-        <textarea class="textable" id="message"></textarea>
-        <button type="submit" id="submit-message" ><img src="./images/send.png"></button>
+      <!--message-input-->
+      <section id="message-input-section">
+        <textarea class="textable" id="message-input"></textarea>
+        <button type="submit" id="submit-message-input" ><img src="./images/send.png"></button>
       </section>
 
     </form>
 
-    <div class="menu"></div>
+    <div class="menu">
+
+      <!--avatar-->
+      <img id="avatar" class="avatar" src="./images/anonymous.jpeg">
+      <input type="file" accept="image/*" id="change-avatar" multiple>
+
+      <!--nickname-->
+      <section id="nickname-input">
+        <label for="nickname">Nickname:</label>
+        <input placeholder="Maria" autocomplete="off" type="text" name="nickname" id="nickname">
+      </section>
+
+    </div>
 
   </body>
 </html>

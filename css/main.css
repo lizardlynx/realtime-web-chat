@@ -1,6 +1,7 @@
 :root {
   --main-bg-color: #e5e5e5;
   --main-msg-bg-color: #f2f2f2;
+  --main-div-menu: #D0D0D0;
 }
 
 /*body customizing*/
@@ -19,7 +20,7 @@ section {
   margin: 20px;
 }
 
-section#message-input {
+section#message-input-section {
   position: fixed;
   bottom: 2%;
   left: 1%;
@@ -36,13 +37,17 @@ section#message-input {
   border-right: 2px solid #ffd700;
 }
 
+.textable:focus {
+  width: 50%;
+}
+
 /*input button*/
 button {
   visibility: hidden;
   cursor: pointer;
 }
 
-img {
+button > img {
   visibility: visible;
   border-radius: 30%;
   border-top-right-radius: 3%;
@@ -52,7 +57,7 @@ img {
   height: 30px;
 }
 
-img:hover {
+button > img:hover {
   border: 1px solid var(--main-msg-bg-color);
 }
 
@@ -76,7 +81,33 @@ div.menu {
   position: absolute;
   left: 70%;
   top: 0px;
-  background: #D0D0D0;
+  background: var(--main-div-menu);
   height: 100%;
   width: 30%;
+}
+
+.avatar {
+  border-radius: 50%;
+  width: 70px;
+  height: 70px;
+  margin: 10px;
+  max-width: 100%;
+  max-height: 100%;
+  display: block; 
+}
+
+input#change-avatar {
+  display: none;
+}
+
+input#nickname {
+  border: none;
+  border-bottom: 2px solid darkgray;
+  background-color: var(--main-div-menu);
+  transition: border-bottom 1s;
+}
+
+input#nickname:focus {
+  border-bottom: 2px solid #f5f500;
+  transition: border-bottom 1s;
 }
