@@ -63,17 +63,44 @@ button > img:hover {
 
 /*div chat customizing*/
 div#chat {
+  height: 80%;
   position: absolute;
+  overflow: scroll;
   bottom: 90px;
   left: 35px;
+  width: 65%;
 }
 
 div#chat div {
-  padding-left: 5px;
-  width: 150%;
+  position: relative;
+  width: 90%;
   height: auto;
+  padding-left: 5px;
   border-radius: 5px;
   background-color: var(--main-msg-bg-color);
+  overflow: auto;
+  margin: 10px;
+  float: left;
+}
+
+div#chat img.avatar {
+  width: 40px;
+  height: 40px;
+  margin: 10px;
+  float: left;
+}
+
+p.message {
+  margin: 10px;
+  margin-bottom: 25px;
+  word-break: break-word; 
+}
+
+p.time {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  margin: 5px;
 }
 
 /*menu div*/
@@ -84,6 +111,11 @@ div.menu {
   background: var(--main-div-menu);
   height: 100%;
   width: 30%;
+  border-top-left-radius: 5%;
+  border-bottom-left-radius: 5%;
+  border-top: 1px solid darkgray;
+  border-left: 1px solid darkgray;
+  border-bottom: 1px solid darkgray;
 }
 
 .avatar {
@@ -92,22 +124,14 @@ div.menu {
   border: 1px solid #999;
   border-radius: 50%;
   float: left;
-  margin-right: 10px;
+  margin: 10px;
   padding: 1px;
+  background-color: white;
 }
 
-section.message-section {
-  width: 70%;
-  height: auto;
-}
-
-section.message-section > img.avatar {
-  width: 50px;
-  height: 50px;
-}
-
-section.message-section > div {
-  height: auto;
+div.menu .avatar:hover {
+  opacity: 0.5;
+  cursor: pointer;
 }
 
 input#change-avatar {

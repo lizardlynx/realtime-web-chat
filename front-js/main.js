@@ -1,19 +1,34 @@
 'use strict';
 
+//function for scrolling div to end
+function scrollToBottom(element) {
+  element.scrollTop = element.scrollHeight - element.getBoundingClientRect().height;
+}
+
 //function for sending messages to chat
 function sendMessage(message) {
-  const section = document.createElement('section');
-  section.classList.add('message-section');
+  const divMessage = document.createElement('div');
+  
   const avatarPicture = new Image();
   avatarPicture.classList.add('avatar');
   avatarPicture.setAttribute('src', message.avatar);
-  section.appendChild(avatarPicture);
+  chat.appendChild(avatarPicture);
 
-  const divMessage = document.createElement('div');
-  message.message = message.message;
-  divMessage.innerHTML = `<p>${message.name + ': ' + message.message}</p>`;
-  section.appendChild(divMessage);
-  chat.appendChild(section);
+  const pTime = document.createElement('p');
+  const time = new Date();
+  const hours = time.getHours();
+  const minutes = time.getMinutes();
+  pTime.classList.add('time');
+  pTime.innerHTML = hours + ':' + minutes;
+  divMessage.appendChild(pTime);
+
+  const p = document.createElement('p');
+  p.classList.add('message');
+  message.message = message.message.replace(/\r\n/g, '<br />').replace(/[\r\n]/g, '<br />');
+  p.innerHTML = message.name + ': ' + message.message;
+  divMessage.appendChild(p);
+  chat.appendChild(divMessage);
+  scrollToBottom(chat); 
 }
 
 //function for creating groups
