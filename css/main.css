@@ -118,6 +118,7 @@ div.menu {
   border-bottom: 1px solid darkgray;
 }
 
+/*avatar section*/
 .avatar {
   width: 70px;
   height: 70px;
@@ -138,6 +139,7 @@ input#change-avatar {
   display: none;
 }
 
+/*nickname section*/
 input#nickname {
   border: none;
   border-bottom: 2px solid darkgray;
@@ -146,6 +148,20 @@ input#nickname {
 }
 
 input#nickname:focus {
+  border-bottom: 2px solid #f5f500;
+  transition: border-bottom 1s;
+}
+
+/*find section*/
+input#find {
+  border: none;
+  background-color: var(--main-div-menu);
+  margin: 10%;
+  margin-left: 1%;
+  border-bottom: 2px solid darkgray;
+}
+
+input#find:focus {
   border-bottom: 2px solid #f5f500;
   transition: border-bottom 1s;
 }

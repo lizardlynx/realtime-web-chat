@@ -52,9 +52,14 @@ const toDataURL = url => fetch(url)
   reader.readAsDataURL(blob);
 }));
 
+function GenerateID() {
+  return Math.floor(Math.random() * 10000);
+}
+
 document.addEventListener('DOMContentLoaded', () => {
 
   const socket = new WebSocket('ws://localhost:8000/'); 
+  const userID = GenerateID();
 
   //elements of html
   const nickname = document.getElementById('nickname');
@@ -62,24 +67,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const submitButton = document.getElementById('submit-message-input');
   const avatar = document.getElementById('avatar');
   const changeAvatar = document.getElementById('change-avatar');
-  const group = document.getElementById('group');
-  const createButton = document.getElementById('create-group');
-  const groups = document.getElementById('groups');
-  const chat = document.getElementById('chat');
-
-        /*//create group
-        createButton.addEventListener('click', event => {
-          event.preventDefault();
-          
-          const message = {
-            type: 'createGroup',
-            name: nickname.value,
-            name: group.value,
-          }
-
-          socket.send(JSON.stringify(message));
-          createGroup(message);
-        });*/
+  const searchSection = document.getElementById('find');
 
   //handling enter
   messageInput.addEventListener('keydown', function(e){
@@ -110,6 +98,7 @@ document.addEventListener('DOMContentLoaded', () => {
       name: nickname.value,
       message: messageInput.value,
       avatar: '',
+      id: userID,
     }
 
     toDataURL(avatar.src)
@@ -137,4 +126,15 @@ document.addEventListener('DOMContentLoaded', () => {
       createGroup(text);
     } 
   };
+
+  searchSection.addEventListener('click', () => {
+    const getUsers = {
+      id: userID,
+      type: "getUsers",
+    }
+    socket.send(JSON.stringify(getUsers));
+
+    //get list of available users and show them as dropdown
+  });
+
 });

@@ -57,7 +57,6 @@ async function handleRequest (req, res) {
     res.write(data);
   }
   res.end();
-  
 }
 
 // Create an HTTP server
@@ -71,26 +70,38 @@ server.listen(8000, () => {
 
 //create websocket
 const ws = new WebSocket.Server({server});
+const clients = {};
 
 ws.on('connection', (connection, req) => {
   const ip = req.socket.remoteAddress;
-  //console.log(connection);
 
   connection.on('message', message => {
-    const type = JSON.parse(message).type;
-    console.log(typeof message, message);
-    if (type == 'sendMessage' || type == 'createGroup') {
+    const messageParsed = JSON.parse(message);
+    const type = messageParsed.type;
+    const id = messageParsed.id;
+
+    if (type == 'sendMessage') {
+      const name = messageParsed.name;
+      if(!Object.keys(clients).includes(id)) 
+      {
+        ws.id = id++;
+        clients[ws.id] = [ws, name];
+        console.log(clients);
+      }
+    
       ws.clients.forEach(function each(client) {
         if (client !== connection && client.readyState === WebSocket.OPEN) {
           client.send(message);
         }
       });
-    } else {}
+    } else if(type == "getUsers") {
+      //TODO: find a way to display all users without any unnessesary information
+      //clients[id][0].send(clients);
+    }
     
   });
   
   connection.on('close', () => {
-    console.log(`Disconnected ${ip}`);
   });
 });
 
