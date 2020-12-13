@@ -258,6 +258,7 @@ function openContact(contact, idto, name) {
     dialog.classList.add('chat');
     const chatHolder = document.getElementById('chat-holder');
     chatHolder.appendChild(dialog);
+    dialog.style.display = "none";
     contactList[idto] = contact;
   } else {
     dialog = document.getElementsByClassName('chat')[contactNumber];
