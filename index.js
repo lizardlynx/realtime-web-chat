@@ -3,7 +3,7 @@
 const http = require('http');
 const fs = require('fs');
 const WebSocket = require('ws');
-const mysql = require('mysql');
+//const mysql = require('mysql');
 
 //this function asyncronously reads file
 function readFileInfo(file) {
@@ -19,7 +19,7 @@ function readFileInfo(file) {
   });
 }
   
-  //handling rejections in readFileInfo
+//handling rejections in readFileInfo
 async function readFile(file) {
   try {
     const data = await readFileInfo(file);
@@ -73,32 +73,57 @@ const ws = new WebSocket.Server({server});
 const clients = {};
 
 ws.on('connection', (connection, req) => {
+  //join
   const ip = req.socket.remoteAddress;
 
+  //message from client
   connection.on('message', message => {
     const messageParsed = JSON.parse(message);
     const type = messageParsed.type;
     const id = messageParsed.id;
+    const name = messageParsed.name;
+    const avatar = messageParsed.avatar;
 
-    if (type == 'sendMessage') {
-      const name = messageParsed.name;
-      if(!Object.keys(clients).includes(id)) 
-      {
-        ws.id = id++;
-        clients[ws.id] = [ws, name];
-        console.log(clients);
+    if (!clients[id]) clients[id] = [connection, 'unknown', './images/anonymous.jpeg'];
+    
+    if (type == 1) {
+      clients[id][1] = name;
+    } else if (type == 2) {
+      clients[id][2] = avatar;
+    } else if (type == 4) {
+      const messageToClient = {
+        type: 4,
+        list: [],
+      };
+      const userToFind = messageParsed.userToFind;
+      for (let [id, client] of Object.entries(clients)) {
+        if (client[1] == userToFind) messageToClient.list.push([id, client[1], client[2]]);
       }
-    
-      ws.clients.forEach(function each(client) {
-        if (client !== connection && client.readyState === WebSocket.OPEN) {
-          client.send(message);
+      connection.send(JSON.stringify(messageToClient));
+    } else if (type == 3) {
+      const messageToClient = {
+        type: 3,
+        name: clients[id][1],
+        idfrom: id,
+        idto: messageParsed.destination,
+        avatar: clients[id][2],
+        message: messageParsed.message,
+      }
+      if (messageParsed.destination == "All") {
+        //send message to everybody
+        ws.clients.forEach(function each(client) {
+          if (client.readyState === WebSocket.OPEN) {
+            client.send(JSON.stringify(messageToClient));
+          }
+        });
+      } else {
+        if (clients[messageParsed.destination][0].readyState === WebSocket.OPEN) {
+          clients[messageParsed.destination][0].send(JSON.stringify(messageToClient));
+          connection.send(JSON.stringify(messageToClient));
         }
-      });
-    } else if(type == "getUsers") {
-      //TODO: find a way to display all users without any unnessesary information
-      //clients[id][0].send(clients);
-    }
-    
+      }
+      
+    } 
   });
   
   connection.on('close', () => {

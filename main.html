@@ -3,22 +3,24 @@
     <title>Chat</title>
     <script src="/front-js/main.js"></script>
     <link rel="stylesheet" type="text/css" href = "/css/main.css">
+    <link href="/images/favicon.ico" rel="icon" type="image/x-icon" />
   </head>
 
   <body>
-    <div id="groups"></div>
-    <div id="chat"></div>
+    <div id="chat-name">Chat To Connect</div>
+    <div id="chat-holder">
+      <div class="chat"></div>
+    </div>
 
-    <!--input section-->
-    <form>
-      
-      <!--message-input-->
-      <section id="message-input-section">
-        <textarea class="textable" id="message-input"></textarea>
-        <button type="submit" id="submit-message-input" ><img src="./images/send.png"></button>
-      </section>
-
-    </form>
+    <!--message-input-->
+    <section id="message-input-section">
+      <textarea class="textable" id="message-input"></textarea>
+      <button type="submit" id="submit-message-input" ><img src="./images/send.png"></button>
+      <div class="destination">
+        <p>You are now writing to:</p>
+        <p id="destination">All</p>
+      </div>
+    </section>
 
     <div class="menu">
 
@@ -33,6 +35,13 @@
 
       <!--find section-->
       <input placeholder="Search" autocomplete="off" type="text" id="find">
+      <div id="search-results"></div>
+      <div id="contacts">
+        <div class="contact">
+          <img class="avatar" src="./images/anonymous.jpeg">
+          <p>All</p>
+        </div>
+      </div>
 
     </div>
 

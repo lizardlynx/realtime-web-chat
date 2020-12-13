@@ -1,7 +1,7 @@
 :root {
   --main-bg-color: #e5e5e5;
   --main-msg-bg-color: #f2f2f2;
-  --main-div-menu: #D0D0D0;
+  --main-div-menu: #46a566;
 }
 
 /*body customizing*/
@@ -11,6 +11,18 @@ body {
   
 * {
   box-sizing: border-box;
+}
+
+/*chat-name*/
+div#chat-name {
+  font-style: italic;
+  width: 100%;
+  height: 5%;
+  background-color: aquamarine;
+  position: absolute;
+  top: 0;
+  left: 0;
+  padding: 5px;
 }
 
 /*input customizing*/
@@ -37,10 +49,6 @@ section#message-input-section {
   border-right: 2px solid #ffd700;
 }
 
-.textable:focus {
-  width: 50%;
-}
-
 /*input button*/
 button {
   visibility: hidden;
@@ -52,7 +60,7 @@ button > img {
   border-radius: 30%;
   border-top-right-radius: 3%;
   border-top-left-radius: 50%;
-  border: 1px solid gray;
+  border: 1px solid rgb(26, 71, 45);
   width: 30px;
   height: 30px;
 }
@@ -61,8 +69,23 @@ button > img:hover {
   border: 1px solid var(--main-msg-bg-color);
 }
 
+/*destination*/
+section#message-input-section div.destination{
+  position: fixed;
+  bottom: 6%;
+  right: 40%
+}
+
+section#message-input-section div.destination p {
+  display: inline;
+}
+
+section#message-input-section div.destination p#destination {
+  font-style: italic;
+}
+
 /*div chat customizing*/
-div#chat {
+div.chat {
   height: 80%;
   position: absolute;
   overflow: scroll;
@@ -71,7 +94,7 @@ div#chat {
   width: 65%;
 }
 
-div#chat div {
+div.chat div {
   position: relative;
   width: 90%;
   height: auto;
@@ -83,7 +106,7 @@ div#chat div {
   float: left;
 }
 
-div#chat img.avatar {
+div.chat img.avatar {
   width: 40px;
   height: 40px;
   margin: 10px;
@@ -107,12 +130,10 @@ p.time {
 div.menu {
   position: absolute;
   left: 70%;
-  top: 0px;
+  top: 0%;
   background: var(--main-div-menu);
   height: 100%;
   width: 30%;
-  border-top-left-radius: 5%;
-  border-bottom-left-radius: 5%;
   border-top: 1px solid darkgray;
   border-left: 1px solid darkgray;
   border-bottom: 1px solid darkgray;
@@ -130,7 +151,7 @@ div.menu {
   background-color: white;
 }
 
-div.menu .avatar:hover {
+div.menu > .avatar:hover {
   opacity: 0.5;
   cursor: pointer;
 }
@@ -156,7 +177,7 @@ input#nickname:focus {
 input#find {
   border: none;
   background-color: var(--main-div-menu);
-  margin: 10%;
+  margin: 5%;
   margin-left: 1%;
   border-bottom: 2px solid darkgray;
 }
@@ -164,4 +185,22 @@ input#find {
 input#find:focus {
   border-bottom: 2px solid #f5f500;
   transition: border-bottom 1s;
+}
+
+/*contacts*/
+div.contact {
+  background-color: rgb(25, 238, 167);
+  cursor: pointer;
+  height: 90px;
+  margin: 0;
+  border-bottom: 2px solid var(--main-bg-color);
+}
+
+div.contact p {
+  margin: 0;
+  padding: 2%;
+}
+
+div.contact:hover {
+  background-color: aquamarine;
 }
