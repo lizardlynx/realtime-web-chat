@@ -127,6 +127,7 @@ ws.on('connection', (connection, req) => {
   });
   
   connection.on('close', () => {
+    
   });
 });
 

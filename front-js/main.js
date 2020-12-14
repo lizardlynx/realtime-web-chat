@@ -46,6 +46,11 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   });
 
+  nickname.addEventListener('focusin', function(e){
+    e.preventDefault();
+    nickname.style.borderColor = "#f5f500";
+  });
+
   nickname.addEventListener('focusout', function(e){
     e.preventDefault();
       const messageToServer = {
@@ -141,53 +146,60 @@ document.addEventListener('DOMContentLoaded', () => {
         searchResults.appendChild(contact);
 
         contact.addEventListener('click', () => {
-          const dialogs = document.getElementsByClassName('chat');
-          for (let dialog of dialogs) {
-            dialog.style.display = "none";
-          }
-          openedChat = openContact(contact, user[0], user[1]);
-          openedChat.style.display = "block";
+          openedChat = contactClick(contact, user[0], user[1]);
         });
       }
     } else if (message.type == 3) {
       let chat = openedChat;
       if (message.idfrom == userID) message.name = "You";
-      else if (message.idto != "All") {
-        const found = false;
+      else if (message.idto != "All"){
+        let found = false;
         for (const id in contactList) {
           if (message.idfrom == id) {
-            chat = openContact(contactList[id], message.idfrom, message.name);
+            chat = selectContact(contactList[id], message.idfrom);
             found = true;
             break;
           }
         }
         if (!found) {
           const contact = document.createElement('div');
+          contact.classList.add('contact');
           const avatarPicture = new Image();
           avatarPicture.classList.add('avatar');
           avatarPicture.setAttribute('src', message.avatar);
           contact.appendChild(avatarPicture);
   
-          contact.classList.add('contact');
           const p = document.createElement('p');
           p.innerHTML = message.name;
           contact.appendChild(p);
-          chat = openContact(contact, message.idfrom, message.name);
+          chat = selectContact(contact, message.idfrom);
           contactsSection.appendChild(contact);
   
           contact.addEventListener('click', () => {
-            const dialogs = document.getElementsByClassName('chat');
-            for (let dialog of dialogs) {
-              dialog.style.display = "none";
-            }
-            chat.style.display = "block";
+            openedChat = contactClick(contact, message.idfrom, message.name);
           });
         }
+      } else if (message.idto == "All"){
+        chat = document.getElementsByClassName('chat')[0];
       }
       sendMessage(chat, message);
     }
   };
 });
+
+//on click on contact 
+//opens dialog with contact and returns it
+function contactClick(contact, idfrom, name) {
+  destinationUser = idfrom;
+  document.getElementById('destination').innerHTML = name;
+  const dialogs = document.getElementsByClassName('chat');
+  for (let dialog of dialogs) {
+    dialog.style.display = "none";
+  }
+  const chat = selectContact(contact, idfrom);
+  chat.style.display = "block";
+  return chat;
+}
 
 //function for scrolling div to end
 function scrollToBottom(element) {
@@ -237,11 +249,8 @@ function GenerateID() {
 
 //returns chat for communicating with chosen contact
 //adds contact to contacts
-function openContact(contact, idto, name) {
+function selectContact(contact, idto) {
   document.getElementById('search-results').textContent = '';
-  const dest = document.getElementById('destination');
-  dest.innerHTML = name; 
-  destinationUser = idto;
 
   const contacts = document.getElementsByClassName('contact');
   let contactNumber = null;
@@ -253,17 +262,17 @@ function openContact(contact, idto, name) {
   }
   let dialog = null;
   if (contactNumber === null) {
-    contact.classList.add('contact');
-    dialog = document.createElement('div');
-    dialog.classList.add('chat');
     const chatHolder = document.getElementById('chat-holder');
+    dialog = document.createElement('div');
     chatHolder.appendChild(dialog);
     dialog.style.display = "none";
+    dialog.classList.add('chat');
+    contact.classList.add('contact');
     contactList[idto] = contact;
+    document.getElementById('contacts').appendChild(contact);
   } else {
     dialog = document.getElementsByClassName('chat')[contactNumber];
   } 
-  document.getElementById('contacts').appendChild(contact);
   document.getElementById('contacts').style.display = "block";
   return dialog;
 }
