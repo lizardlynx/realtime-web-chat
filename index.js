@@ -127,7 +127,13 @@ ws.on('connection', (connection, req) => {
   });
   
   connection.on('close', () => {
-    
+    for (let [id, client] of Object.entries(clients))
+    {
+      if (client[0] == connection) {
+        console.log(client[1] + " left");
+        delete clients[id];
+      }
+    }
   });
 });
 

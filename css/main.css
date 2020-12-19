@@ -1,7 +1,9 @@
 :root {
-  --main-bg-color: #e5e5e5;
+  --main-bg-color: #d5e2ed;
   --main-msg-bg-color: #f2f2f2;
   --main-div-menu: #46a566;
+  --main-line-color: #3d9690;
+  --main-border-color: #023026;
 }
 
 /*body customizing*/
@@ -18,7 +20,7 @@ div#chat-name {
   font-style: italic;
   width: 100%;
   height: 5%;
-  background-color: aquamarine;
+  background-color: var(--main-line-color);
   position: absolute;
   top: 0;
   left: 0;
@@ -60,7 +62,7 @@ button > img {
   border-radius: 30%;
   border-top-right-radius: 3%;
   border-top-left-radius: 50%;
-  border: 1px solid rgb(26, 71, 45);
+  border: 1px solid var(--main-border-color);
   width: 30px;
   height: 30px;
 }
@@ -202,5 +204,5 @@ div.contact p {
 }
 
 div.contact:hover {
-  background-color: aquamarine;
+  background-color: var(--main-line-color);;
 }
