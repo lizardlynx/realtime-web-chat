@@ -2,7 +2,7 @@
 ## Short Description
 University project, which is focused on creating a realtime-web-chat.  
 ## Concept
-Chat provides possibility to talk to people, who use the same app.
+Chat provides possibility to talk to people, who use the same app. Users are able to do that either in group chat, or in separate rooms.
 ## Functionality
 * talking to everyone in big group chat;
 * search function;
