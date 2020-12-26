@@ -77,7 +77,7 @@ class Listeners {
       chat = this.openedChat;
     } else if (message.idto == "All") {
       chat = document.getElementsByClassName('chat')[0];
-    } else if (message.idto != "All") {
+    } else {
       for (const id in this.contactList) {
         if (message.idfrom == id) chat = this.selectContact(this.contactList[id], message.idfrom);
       }
@@ -135,24 +135,27 @@ class Listeners {
     const message = JSON.parse(messageFromServer);
     if (message.type == 3) this.onTextMessage(message);
     else if (message.type == 4) this.onSearchMessage(message);
+    //else if (message.type == 5) this.onLeaveMessage(message);
   }
   
   //function for sending messages to chat
   sendMessage(chat, message) {
     const divMessage = document.createElement('div');
+    
+    if (message.message != "left") {
+      const avatarPicture = new Image();
+      avatarPicture.classList.add('avatar');
+      avatarPicture.setAttribute('src', message.avatar);
+      chat.appendChild(avatarPicture);
   
-    const avatarPicture = new Image();
-    avatarPicture.classList.add('avatar');
-    avatarPicture.setAttribute('src', message.avatar);
-    chat.appendChild(avatarPicture);
-
-    const pTime = document.createElement('p');
-    const time = new Date();
-    const hours = time.getHours();
-    const minutes = time.getMinutes();
-    pTime.classList.add('time');
-    pTime.innerHTML = hours + ':' + minutes;
-    divMessage.appendChild(pTime);
+      const pTime = document.createElement('p');
+      const time = new Date();
+      const hours = time.getHours();
+      const minutes = time.getMinutes();
+      pTime.classList.add('time');
+      pTime.innerHTML = hours + ':' + minutes;
+      divMessage.appendChild(pTime);
+    }
 
     const p = document.createElement('p');
     p.classList.add('message');
@@ -163,7 +166,6 @@ class Listeners {
     chat.appendChild(divMessage);
     this.scrollToBottom(chat); 
   }
-
 
   //funcs, which are often used by listeners
 

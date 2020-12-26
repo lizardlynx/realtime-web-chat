@@ -3,6 +3,9 @@
 const http = require('http');
 const fs = require('fs');
 const WebSocket = require('ws');
+const messageToClient = require('./node-js/messageToClient');
+const TextToClient = messageToClient.TextToClient;
+const SearchToClient = messageToClient.SearchToClient;
 //const mysql = require('mysql');
 
 //this function asyncronously reads file
@@ -71,6 +74,7 @@ server.listen(8000, () => {
 //create websocket
 const ws = new WebSocket.Server({server});
 const clients = {};
+const dialogs = [];
 
 ws.on('connection', (connection, req) => {
   //join
@@ -81,58 +85,51 @@ ws.on('connection', (connection, req) => {
     const messageParsed = JSON.parse(message);
     const type = messageParsed.type;
     const id = messageParsed.id;
-    const name = messageParsed.name;
-    const avatar = messageParsed.avatar;
+    const info = messageParsed.info;
 
     if (!clients[id]) clients[id] = [connection, 'unknown', './images/anonymous.jpeg'];
     
-    if (type == 1) {
-      clients[id][1] = name;
-    } else if (type == 2) {
-      clients[id][2] = avatar;
-    } else if (type == 4) {
-      const messageToClient = {
-        type: 4,
-        list: [],
-      };
-      const userToFind = messageParsed.userToFind;
+    if (info) clients[id][type] = info;
+    else if (type == 4) {
+      const list = [];
       for (let [id, client] of Object.entries(clients)) {
-        if (client[1] == userToFind) messageToClient.list.push([id, client[1], client[2]]);
+        if (client[1] == messageParsed.userToFind) list.push([id, client[1], client[2]]);
       }
-      connection.send(JSON.stringify(messageToClient));
+      const messageToClient = new SearchToClient(list);
+      messageToClient.send(ws, connection, null);
     } else if (type == 3) {
-      const messageToClient = {
-        type: 3,
-        name: clients[id][1],
-        idfrom: id,
-        idto: messageParsed.destination,
-        avatar: clients[id][2],
-        message: messageParsed.message,
-      }
-      if (messageParsed.destination == "All") {
-        //send message to everybody
-        ws.clients.forEach(function each(client) {
-          if (client.readyState === WebSocket.OPEN) {
-            client.send(JSON.stringify(messageToClient));
-          }
-        });
-      } else {
-        if (clients[messageParsed.destination][0].readyState === WebSocket.OPEN) {
-          clients[messageParsed.destination][0].send(JSON.stringify(messageToClient));
-          connection.send(JSON.stringify(messageToClient));
-        }
-      }
-      
+      if (!dialogs.includes([id.toString(), messageParsed.destination.toString()]) && !dialogs.includes([messageParsed.destination.toString(), id.toString()])) dialogs.push([id.toString(), messageParsed.destination.toString()]);
+      const messageToClient = new TextToClient(clients[id][1], id, messageParsed.destination, clients[id][2], messageParsed.message);
+      let client = "All";
+      if (messageParsed.destination != "All") client = clients[messageParsed.destination][0];
+      messageToClient.send(ws, client, connection);
     } 
   });
+
+
   
   connection.on('close', () => {
-    for (let [id, client] of Object.entries(clients))
-    {
-      if (client[0] == connection) {
-        console.log(client[1] + " left");
-        delete clients[id];
+    for (const [id, client] of Object.entries(clients)) {
+      if (client[0] != connection) continue;
+      let i = 0;
+      while (i < dialogs.length) {
+        if (dialogs[i].lastIndexOf(id) == -1) {
+          i++;
+          continue;
+        }
+        const messageToClient = new TextToClient(clients[id][1], id, "All", clients[id][2], "left");
+        for (let j = 0; j < 2; j++) {
+          messageToClient.idto = dialogs[i][j];
+          let client = "All";
+          if (messageToClient.idto != "All") client = clients[messageToClient.idto][0];
+          if (dialogs[i][j] == id) continue;
+          else messageToClient.send(ws, client, connection);
+        }
+        dialogs.splice(i, 1);
+        i = 0;
       }
+      console.log(client[1] + " left");
+      delete clients[id];
     }
   });
 });
