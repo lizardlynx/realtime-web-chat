@@ -80,16 +80,20 @@ class Listeners {
     const contactsSection = document.getElementById('contacts');
     let chat = null;
     const u1Id = message.idfrom;
-    if (u1Id === this.userID) {
+    if (u1Id === this.userID.toString()) {
       message.name = 'You';
       chat = this.openedChat;
     } else if (message.idto === 'All') {
       chat = document.getElementsByClassName('chat')[0];
     } else {
-      for (const [u2Id, contact] in this.contactList) {
-        if (u1Id === u2Id) chat = this.selectContact(contact, u1Id);
+      for (const id in this.contactList) {
+        if (u1Id === id) {
+          chat = this.selectContact(this.contactList[id], u1Id);
+          break;
+        }
       }
       if (chat === null) {
+        console.log('create');
         const contact = document.createElement('div');
         contact.classList.add('contact');
         const avatarPicture = new Image();

@@ -78,8 +78,8 @@ const dialogs = [];
 
 //checks if dialog between two users already exists
 function dialogExists(user1, user2) {
-  if (dialogs.includes([user1, user2]) || dialogs.includes([user2, user1])) {
-    return true;
+  for (let i = 0; i < dialogs.length; i++) {
+    if (dialogs[i].includes(user1) && dialogs[i].includes(user2)) return true;
   }
   return false;
 }
@@ -114,7 +114,9 @@ ws.on('connection', connection => {
       const uName = clients[id][1];
       const uAva = clients[id][2];
       const uMess = messageParsed.message;
-      if (!dialogExists(u1Id, u2Id)) dialogs.push([u1Id, u2Id]);
+      if (!dialogExists(u1Id, u2Id)) {
+        dialogs.push([u1Id, u2Id]);
+      }
       const messageToClient = new TextToClient(uName, u1Id, u2Id, uAva, uMess);
       let u2Connection = 'All';
       if (u2Id !== 'All') u2Connection = clients[u2Id][0];
