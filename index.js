@@ -76,9 +76,15 @@ const ws = new WebSocket.Server({ server });
 const clients = {};
 const dialogs = [];
 
-ws.on('connection', (connection, req) => {
-  //join
-  const ip = req.socket.remoteAddress;
+//checks if dialog between two users already exists
+function dialogExists(user1, user2) {
+  if (dialogs.includes([user1, user2]) || dialogs.includes([user2, user1])) {
+    return true;
+  }
+  return false;
+}
+
+ws.on('connection', connection => {
 
   //message from client
   connection.on('message', message => {
@@ -87,42 +93,55 @@ ws.on('connection', (connection, req) => {
     const id = messageParsed.id;
     const info = messageParsed.info;
 
-    if (!clients[id]) clients[id] = [connection, 'unknown', './images/anonymous.jpeg'];
+    const defName = 'unknown';
+    const defAvatar = './images/anonymous.jpeg';
+    if (!clients[id]) clients[id] = [connection, defName, defAvatar];
 
     if (info) clients[id][type] = info;
-    else if (type == 4) {
+    else if (type === 4) {
       const list = [];
       for (const [id, client] of Object.entries(clients)) {
-        if (client[1] == messageParsed.userToFind) list.push([id, client[1], client[2]]);
+        const clientName = client[1];
+        const clientID = client[2];
+        const userToFind = messageParsed.userToFind;
+        if (clientName === userToFind) list.push([id, clientName, clientID]);
       }
       const messageToClient = new SearchToClient(list);
       messageToClient.send(ws, connection, null);
-    } else if (type == 3) {
-      if (!dialogs.includes([id.toString(), messageParsed.destination.toString()]) && !dialogs.includes([messageParsed.destination.toString(), id.toString()])) dialogs.push([id.toString(), messageParsed.destination.toString()]);
-      const messageToClient = new TextToClient(clients[id][1], id, messageParsed.destination, clients[id][2], messageParsed.message);
-      let client = 'All';
-      if (messageParsed.destination != 'All') client = clients[messageParsed.destination][0];
-      messageToClient.send(ws, client, connection);
+    } else if (type === 3) {
+      const u1Id = id.toString();
+      const u2Id = messageParsed.destination.toString();
+      const uName = clients[id][1];
+      const uAva = clients[id][2];
+      const uMess = messageParsed.message;
+      if (!dialogExists(u1Id, u2Id)) dialogs.push([u1Id, u2Id]);
+      const messageToClient = new TextToClient(uName, u1Id, u2Id, uAva, uMess);
+      let u2Connection = 'All';
+      if (u2Id !== 'All') u2Connection = clients[u2Id][0];
+      messageToClient.send(ws, u2Connection, connection);
     }
   });
 
-
-
   connection.on('close', () => {
     for (const [id, client] of Object.entries(clients)) {
-      if (client[0] != connection) continue;
+      if (client[0] !== connection) continue;
       let i = 0;
       while (i < dialogs.length) {
-        if (dialogs[i].lastIndexOf(id) == -1) {
+        if (dialogs[i].lastIndexOf(id) === -1) {
           i++;
           continue;
         }
-        const messageToClient = new TextToClient(clients[id][1], id, 'All', clients[id][2], 'left');
+        const uName = clients[id][1];
+        const uAva = clients[id][2];
+        const u2Id = 'All';
+        const uMess = 'left';
+        const messageToClient = new TextToClient(uName, id, u2Id, uAva, uMess);
         for (let j = 0; j < 2; j++) {
-          messageToClient.idto = dialogs[i][j];
+          const u2Id = dialogs[i][j];
+          messageToClient.idto = u2Id;
           let client = 'All';
-          if (messageToClient.idto != 'All') client = clients[messageToClient.idto][0];
-          if (dialogs[i][j] == id) continue;
+          if (u2Id !== 'All') client = clients[u2Id][0];
+          if (dialogs[i][j] === id) continue;
           else messageToClient.send(ws, client, connection);
         }
         dialogs.splice(i, 1);

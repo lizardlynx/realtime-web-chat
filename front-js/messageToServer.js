@@ -1,11 +1,10 @@
 'use strict';
 
 //message to server hierarchy
-class MessageToServer
-{
-  constructor () {
+class MessageToServer {
+  constructor() {
     if (this.constructor === MessageToServer) {
-      throw new Error("Cannot instantiate this class");
+      throw new Error('Cannot instantiate this class');
     }
   }
 
@@ -14,6 +13,7 @@ class MessageToServer
     socket.send(JSON.stringify(this));
   }
 }
+// eslint-disable-next-line no-unused-vars
 class NameToServer extends MessageToServer {
   constructor(name) {
     super();
@@ -22,6 +22,7 @@ class NameToServer extends MessageToServer {
   }
 }
 
+// eslint-disable-next-line no-unused-vars
 class AvatarToServer extends MessageToServer {
   constructor(avatar) {
     super();
@@ -29,6 +30,7 @@ class AvatarToServer extends MessageToServer {
     this.info = avatar;
   }
 }
+// eslint-disable-next-line no-unused-vars
 class TextToServer extends MessageToServer {
   constructor(message, destinationID) {
     super();
@@ -38,6 +40,7 @@ class TextToServer extends MessageToServer {
   }
 }
 
+// eslint-disable-next-line no-unused-vars
 class SearchToServer extends MessageToServer {
   constructor(userToFindID) {
     super();

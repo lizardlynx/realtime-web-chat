@@ -2,12 +2,13 @@
 
 document.addEventListener('DOMContentLoaded', () => {
   const socket = new WebSocket('ws://localhost:8000/');
+  // eslint-disable-next-line no-undef
   const listeners = new Listeners(socket);
 
   const nickname = document.getElementById('nickname');
   const messageInput = document.getElementById('message-input');
   const submitButton = document.getElementById('submit-message-input');
-  const changeAvatar = document.getElementById('change-avatar');
+  const avatar = document.getElementById('change-avatar');
   const searchSection = document.getElementById('find');
   const allChat = document.getElementsByClassName('contact')[0];
 
@@ -24,13 +25,12 @@ document.addEventListener('DOMContentLoaded', () => {
     nickname.style.borderColor = '#f5f500';
   });
   nickname.addEventListener('keydown', e => {
-    if (e.code != 'Enter') return;
+    if (e.code !== 'Enter') return;
     listeners.sendNameToServer(e);
   });
 
   //change avatar
-  avatar.addEventListener('click', () => changeAvatar.click());
-  changeAvatar.addEventListener('change', e => listeners.changeAvatar(e), false);
+  avatar.addEventListener('change', e => listeners.changeAvatar(e), false);
 
   //send message
   submitButton.addEventListener('click', e => listeners.submitButtonPressed(e));

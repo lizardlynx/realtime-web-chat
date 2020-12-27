@@ -3,25 +3,26 @@
 const WebSocket = require('ws');
 
 //message to client hierarchy
-class MessageToClient
-{
-  constructor () {
-    this.idto = "All";
+class MessageToClient {
+  constructor() {
+    this.idto = 'All';
     if (this.constructor === MessageToClient) {
-      throw new Error("Cannot instantiate this class");
+      throw new Error('Cannot instantiate this class');
     }
   }
 
   //find who to send
   send(ws, client, connection) {
-    if (this.idto == "All") this.sendToEverybody(ws);
-    else this.sendToID(client, connection)
+    if (this.idto === 'All') this.sendToEverybody(ws);
+    else this.sendToID(client, connection);
   }
 
   //send to all connected clients
   sendToEverybody(ws) {
     ws.clients.forEach(client => {
-      if (client.readyState === WebSocket.OPEN) client.send(JSON.stringify(this));
+      if (client.readyState === WebSocket.OPEN) {
+        client.send(JSON.stringify(this));
+      }
     });
   }
 
@@ -47,11 +48,11 @@ class TextToClient extends MessageToClient {
 }
 
 class SearchToClient extends MessageToClient {
-    constructor(list) {
-      super();
-      this.type = 4;
-      this.list = list;
-    }
+  constructor(list) {
+    super();
+    this.type = 4;
+    this.list = list;
   }
+}
 
-module.exports = { TextToClient: TextToClient, SearchToClient: SearchToClient };
+module.exports = { TextToClient, SearchToClient };
