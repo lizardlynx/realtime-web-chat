@@ -12,7 +12,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const allChat = document.getElementsByClassName('contact')[0];
 
   //saving all-chat to contacts
-  listeners.addToContactList("All", listeners.openedChat);
+  listeners.addToContactList('All', listeners.openedChat);
 
   //handling contact for all-chat
   allChat.addEventListener('click', () => listeners.showAllChat());
@@ -21,7 +21,7 @@ document.addEventListener('DOMContentLoaded', () => {
   nickname.addEventListener('focusout', e => listeners.sendNameToServer(e));
   nickname.addEventListener('focusin', e => {
     e.preventDefault();
-    nickname.style.borderColor = "#f5f500";
+    nickname.style.borderColor = '#f5f500';
   });
   nickname.addEventListener('keydown', e => {
     if (e.code != 'Enter') return;

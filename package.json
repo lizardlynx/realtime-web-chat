@@ -1,0 +1,27 @@
+{
+  "name": "realtime-web-chat",
+  "version": "1.0.0",
+  "description": "Diploma project, focused on creating a web chat.",
+  "main": "index.js",
+  "scripts": {
+    "lint": "eslint",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/lizardlynx/realtime-web-chat.git"
+  },
+  "keywords": [
+    "chat",
+    "web"
+  ],
+  "author": "lizardlynx",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/lizardlynx/realtime-web-chat/issues"
+  },
+  "homepage": "https://github.com/lizardlynx/realtime-web-chat#readme",
+  "devDependencies": {
+    "eslint": "^7.16.0"
+  }
+}

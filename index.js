@@ -21,7 +21,7 @@ function readFileInfo(file) {
     });
   });
 }
-  
+
 //handling rejections in readFileInfo
 async function readFile(file) {
   try {
@@ -44,7 +44,7 @@ const mime = {
 };
 
 //handle request in http server
-async function handleRequest (req, res) {
+async function handleRequest(req, res) {
   const url = req.url;
   let name = url;
   let extention = url.split('.')[1];
@@ -72,7 +72,7 @@ server.listen(8000, () => {
 });
 
 //create websocket
-const ws = new WebSocket.Server({server});
+const ws = new WebSocket.Server({ server });
 const clients = {};
 const dialogs = [];
 
@@ -88,11 +88,11 @@ ws.on('connection', (connection, req) => {
     const info = messageParsed.info;
 
     if (!clients[id]) clients[id] = [connection, 'unknown', './images/anonymous.jpeg'];
-    
+
     if (info) clients[id][type] = info;
     else if (type == 4) {
       const list = [];
-      for (let [id, client] of Object.entries(clients)) {
+      for (const [id, client] of Object.entries(clients)) {
         if (client[1] == messageParsed.userToFind) list.push([id, client[1], client[2]]);
       }
       const messageToClient = new SearchToClient(list);
@@ -100,14 +100,14 @@ ws.on('connection', (connection, req) => {
     } else if (type == 3) {
       if (!dialogs.includes([id.toString(), messageParsed.destination.toString()]) && !dialogs.includes([messageParsed.destination.toString(), id.toString()])) dialogs.push([id.toString(), messageParsed.destination.toString()]);
       const messageToClient = new TextToClient(clients[id][1], id, messageParsed.destination, clients[id][2], messageParsed.message);
-      let client = "All";
-      if (messageParsed.destination != "All") client = clients[messageParsed.destination][0];
+      let client = 'All';
+      if (messageParsed.destination != 'All') client = clients[messageParsed.destination][0];
       messageToClient.send(ws, client, connection);
-    } 
+    }
   });
 
 
-  
+
   connection.on('close', () => {
     for (const [id, client] of Object.entries(clients)) {
       if (client[0] != connection) continue;
@@ -117,18 +117,18 @@ ws.on('connection', (connection, req) => {
           i++;
           continue;
         }
-        const messageToClient = new TextToClient(clients[id][1], id, "All", clients[id][2], "left");
+        const messageToClient = new TextToClient(clients[id][1], id, 'All', clients[id][2], 'left');
         for (let j = 0; j < 2; j++) {
           messageToClient.idto = dialogs[i][j];
-          let client = "All";
-          if (messageToClient.idto != "All") client = clients[messageToClient.idto][0];
+          let client = 'All';
+          if (messageToClient.idto != 'All') client = clients[messageToClient.idto][0];
           if (dialogs[i][j] == id) continue;
           else messageToClient.send(ws, client, connection);
         }
         dialogs.splice(i, 1);
         i = 0;
       }
-      console.log(client[1] + " left");
+      console.log(client[1] + ' left');
       delete clients[id];
     }
   });
