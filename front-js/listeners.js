@@ -150,6 +150,7 @@ class Listeners {
       contact.childNodes[0].src = info;
     } else if (contact && type === 1) {
       contact.childNodes[1].innerHTML = info;
+      document.getElementById('destination').innerHTML = info;
     }
   }
 
@@ -186,7 +187,9 @@ class Listeners {
     //handling new line
     let text = message.message;
     text = text.replace(/\r\n/g, '<br />').replace(/[\r\n]/g, '<br />');
-    p.innerHTML = message.name + ': ' + text;
+    const name = document.createElement('p');
+    name.classList.add('name');
+    p.innerHTML = name + ': ' + text;
     divMessage.appendChild(p);
     chat.appendChild(divMessage);
     this.scrollToBottom(chat);
