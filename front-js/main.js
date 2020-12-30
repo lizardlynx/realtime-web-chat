@@ -8,7 +8,8 @@ document.addEventListener('DOMContentLoaded', () => {
   const nickname = document.getElementById('nickname');
   const messageInput = document.getElementById('message-input');
   const submitButton = document.getElementById('submit-message-input');
-  const avatar = document.getElementById('change-avatar');
+  const avatar = document.getElementById('avatar');
+  const changeAva = document.getElementById('change-avatar');
   const searchSection = document.getElementById('find');
   const allChat = document.getElementsByClassName('contact')[0];
 
@@ -30,7 +31,8 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 
   //change avatar
-  avatar.addEventListener('change', e => listeners.changeAvatar(e), false);
+  avatar.addEventListener('click', e => changeAva.click(e));
+  changeAva.addEventListener('change', e => listeners.changeAvatar(e), false);
 
   //send message
   submitButton.addEventListener('click', e => listeners.submitButtonPressed(e));

@@ -93,7 +93,6 @@ class Listeners {
         }
       }
       if (chat === null) {
-        console.log('create');
         const contact = document.createElement('div');
         contact.classList.add('contact');
         const avatarPicture = new Image();
