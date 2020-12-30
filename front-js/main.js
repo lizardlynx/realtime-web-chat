@@ -14,7 +14,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const allChat = document.getElementsByClassName('contact')[0];
 
   //saving all-chat to contacts
-  listeners.addToContactList('All', listeners.openedChat);
+  listeners.addToContactList('All', allChat);
 
   //handling contact for all-chat
   allChat.addEventListener('click', () => listeners.showAllChat());

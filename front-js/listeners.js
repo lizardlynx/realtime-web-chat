@@ -140,11 +140,25 @@ class Listeners {
     }
   }
 
+  //handles change info of another user
+  onChangeInfo(message) {
+    const id = message.id;
+    const type = message.type;
+    const info = message.info;
+    const contact = this.contactList[id];
+    if (contact && type === 2) {
+      contact.childNodes[0].src = info;
+    } else if (contact && type === 1) {
+      contact.childNodes[1].innerHTML = info;
+    }
+  }
+
   //handles messages from server
   onSocketMessage(event) {
     const messageFromServer = event.data;
     const message = JSON.parse(messageFromServer);
-    if (message.type === 3) this.onTextMessage(message);
+    if (message.type === 1) this.onChangeInfo(message.message);
+    else if (message.type === 3) this.onTextMessage(message);
     else if (message.type === 4) this.onSearchMessage(message);
   }
 
@@ -215,7 +229,8 @@ class Listeners {
     return Math.floor(Math.random() * 10000);
   }
 
-  //returns chat for communicating with chosen contact, adds contact to contacts
+  //returns dialog for communicating with chosen contact
+  // adds contact to contacts
   selectContact(contact, idto) {
     document.getElementById('search-results').textContent = '';
 

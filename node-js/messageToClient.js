@@ -35,6 +35,14 @@ class MessageToClient {
   }
 }
 
+class InfoToClient extends MessageToClient {
+  constructor(message) {
+    super();
+    this.type = 1;
+    this.message = message;
+  }
+}
+
 class TextToClient extends MessageToClient {
   constructor(name, idfrom, idto, avatar, message) {
     super();
@@ -55,4 +63,4 @@ class SearchToClient extends MessageToClient {
   }
 }
 
-module.exports = { TextToClient, SearchToClient };
+module.exports = { InfoToClient, TextToClient, SearchToClient };

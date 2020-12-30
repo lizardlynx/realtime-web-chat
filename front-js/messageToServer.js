@@ -18,6 +18,7 @@ class NameToServer extends MessageToServer {
   constructor(name) {
     super();
     this.type = 1;
+    this.prop = 'value';
     this.info = name;
   }
 }
@@ -27,6 +28,7 @@ class AvatarToServer extends MessageToServer {
   constructor(avatar) {
     super();
     this.type = 2;
+    this.prop = 'src';
     this.info = avatar;
   }
 }
