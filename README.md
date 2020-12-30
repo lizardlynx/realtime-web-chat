@@ -18,7 +18,7 @@ There are also two main classes, which are held in separate files (for easier na
 ### Frontend  
 
 ### Class diagram  
-![Class Diagram](./docs/ClassDiagram.png)
+![Class Diagram](https://github.com/lizardlynx/realtime-web-chat/blob/main/docs/ClassDiagram(1).png)
 ## Author
 [Gorbunova Yelyzaveta](https://github.com/lizardlynx)  
 ## License
