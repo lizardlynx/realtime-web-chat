@@ -38,6 +38,11 @@ class Listeners {
       // eslint-disable-next-line no-undef
       const messageToServer = new AvatarToServer(dataUrl);
       messageToServer.send(this.socket, this.userID);
+      const messages = document.getElementsByClassName(this.userID);
+      for (let i = 0; i < messages.length; i++) {
+        console.log(messages[i].childNodes);
+        messages[i].childNodes[0].src = src;
+      }
     }
   }
 
@@ -111,7 +116,7 @@ class Listeners {
         });
       }
     }
-    this.sendMessage(chat, message);
+    this.sendMessage(chat, message, message.idfrom);
   }
 
   //adds contact based on search results and creates chat for contact
@@ -148,9 +153,17 @@ class Listeners {
     const contact = this.contactList[id];
     if (contact && type === 2) {
       contact.childNodes[0].src = info;
+      const messages = document.getElementsByClassName(id);
+      for (let i = 0; i < messages.length; i++) {
+        messages[i].childNodes[0].src = info;
+      }
     } else if (contact && type === 1) {
       contact.childNodes[1].innerHTML = info;
       document.getElementById('destination').innerHTML = info;
+      const messages = document.getElementsByClassName(id);
+      for (let i = 0; i < messages.length; i++) {
+        messages[i].childNodes[2].childNodes[0].innerHTML = info;
+      }
     }
   }
 
@@ -164,14 +177,16 @@ class Listeners {
   }
 
   //function for sending messages to chat
-  sendMessage(chat, message) {
+  sendMessage(chat, message, id) {
     const divMessage = document.createElement('div');
+    divMessage.classList.add(id);
 
     if (message.message !== 'left') {
       const avatarPicture = new Image();
       avatarPicture.classList.add('avatar');
+      avatarPicture.classList.add('avaText');
       avatarPicture.setAttribute('src', message.avatar);
-      chat.appendChild(avatarPicture);
+      divMessage.appendChild(avatarPicture);
 
       const pTime = document.createElement('p');
       const time = new Date();
@@ -189,7 +204,9 @@ class Listeners {
     text = text.replace(/\r\n/g, '<br />').replace(/[\r\n]/g, '<br />');
     const name = document.createElement('p');
     name.classList.add('name');
-    p.innerHTML = name + ': ' + text;
+    name.innerText = message.name;
+    p.appendChild(name);
+    p.innerHTML += text;
     divMessage.appendChild(p);
     chat.appendChild(divMessage);
     this.scrollToBottom(chat);
