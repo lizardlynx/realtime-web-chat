@@ -75,6 +75,11 @@ class Listeners {
       dialog.style.display = 'none';
     }
     dialogs[0].style.display = 'block';
+    const contacts = document.getElementsByClassName('contact');
+    for (let i = 0; i < contacts.length; i++) {
+      contacts[i].style.backgroundColor = '#d0e8f2';
+    }
+    contacts[0].style.backgroundColor = '#f3bcdc';
     document.getElementById('destination').innerHTML = 'All';
     this.openedChat = dialogs[0];
     this.destinationUser = 'All';
@@ -218,6 +223,11 @@ class Listeners {
   contactClick(contact, idfrom, name) {
     this.destinationUser = idfrom;
     document.getElementById('destination').innerHTML = name;
+    const contacts = document.getElementsByClassName('contact');
+    for (let i = 0; i < contacts.length; i++) {
+      contacts[i].style.backgroundColor = '#d0e8f2';
+    }
+    contact.style.backgroundColor = '#f3bcdc';
     const dialogs = document.getElementsByClassName('chat');
     for (const dialog of dialogs) {
       dialog.style.display = 'none';

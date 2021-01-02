@@ -17,7 +17,9 @@ document.addEventListener('DOMContentLoaded', () => {
   listeners.addToContactList('All', allChat);
 
   //handling contact for all-chat
-  allChat.addEventListener('click', () => listeners.showAllChat());
+  allChat.addEventListener('click', () => {
+    listeners.showAllChat();
+  });
 
   //handling nickname input
   nickname.addEventListener('focusout', e => listeners.sendNameToServer(e));
