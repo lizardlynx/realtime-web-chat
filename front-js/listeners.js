@@ -10,6 +10,8 @@ class Listeners {
     this.destinationUser = 'All';
     this.contactList = {};
     this.openedChat = document.getElementsByClassName('chat')[0];
+    this.chosenContactColor = '#e6e8f2';
+    this.contactColor = '#b3b9d5';
   }
 
   //sends nickname to server
@@ -77,9 +79,9 @@ class Listeners {
     dialogs[0].style.display = 'block';
     const contacts = document.getElementsByClassName('contact');
     for (let i = 0; i < contacts.length; i++) {
-      contacts[i].style.backgroundColor = '#d0e8f2';
+      contacts[i].style.backgroundColor = this.contactColor;
     }
-    contacts[0].style.backgroundColor = '#f3bcdc';
+    contacts[0].style.backgroundColor = this.chosenContactColor;
     document.getElementById('destination').innerHTML = 'All';
     this.openedChat = dialogs[0];
     this.destinationUser = 'All';
@@ -116,7 +118,7 @@ class Listeners {
         chat = this.selectContact(contact, u1Id);
         contactsSection.appendChild(contact);
         contact.addEventListener('mouseover', () => {
-          contact.style.backgroundColor = '#f3bcdc';
+          contact.style.backgroundColor = this.chosenContactColor;
         });
 
         contact.addEventListener('mouseout', () => {
@@ -152,7 +154,7 @@ class Listeners {
       searchResults.appendChild(contact);
 
       contact.addEventListener('mouseover', () => {
-        contact.style.backgroundColor = '#f3bcdc';
+        contact.style.backgroundColor = this.chosenContactColor;
       });
 
       contact.addEventListener('mouseout', () => {
@@ -169,7 +171,7 @@ class Listeners {
   mouseOut(contact, id) {
     const chatForContact = this.dialogExists(contact, id);
     if (this.openedChat !==  chatForContact || chatForContact === null) {
-      contact.style.backgroundColor = '#d0e8f2';
+      contact.style.backgroundColor = this.contactColor;
     }
   }
 
@@ -251,9 +253,9 @@ class Listeners {
     }
     const contacts = document.getElementsByClassName('contact');
     for (let i = 0; i < contacts.length; i++) {
-      contacts[i].style.backgroundColor = '#d0e8f2';
+      contacts[i].style.backgroundColor = this.contactColor;
     }
-    contact.style.backgroundColor = '#f3bcdc';
+    contact.style.backgroundColor = this.chosenContactColor;
     const dialogs = document.getElementsByClassName('chat');
     for (const dialog of dialogs) {
       dialog.style.display = 'none';

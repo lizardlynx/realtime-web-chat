@@ -22,7 +22,7 @@ document.addEventListener('DOMContentLoaded', () => {
     listeners.showAllChat();
   });
   allChat.addEventListener('mouseover', () => {
-    allChat.style.backgroundColor = '#f3bcdc';
+    allChat.style.backgroundColor = listeners.chosenContactColor;
   });
   allChat.addEventListener('mouseout', () => {
     listeners.mouseOut(allChat, 'All');

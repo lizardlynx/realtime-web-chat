@@ -1,20 +1,20 @@
 :root {
-  --main-bg-color: #f1f2f2;
-  --main-msg-bg-color: #d0e8f2;
-  --main-div-menu: #c1c9ec;
-  --main-line-color: #ccf6c8;
+  --main-bg-color: #1a202b;
+  --main-msg-bg-color: #b3b9d5;
+  --main-div-menu: #c8cbdb;
+  --main-line-color: #c0c449;
   --main-border-color: #2e1a1e;
 }
 
 /*styling header*/
 @font-face {
   font-family: 'chatHeaderFont';
-  src: url(../boogie-nights-shadow/freshmarker.ttf);
+  src: url(../fonts/freshmarker.ttf);
 }
 
 @font-face {
   font-family: 'chatNameFont';
-  src: url(../boogie-nights-shadow/angelina.TTF);
+  src: url(../fonts/angelina.TTF);
 }
 
 /*body customizing*/
@@ -37,8 +37,7 @@ div#chat-name {
   top: 0;
   left: 0;
   padding: 5px;
-  color: black;
-  box-shadow: 0px 3px #f3bcdc;
+  color: #000000;
 }
 
 /*input customizing*/
@@ -63,6 +62,7 @@ section#message-input-section {
   border-left: 2px solid #f5f500;
   border-bottom: 2px solid #fbb619; 
   border-right: 2px solid #fbb619;
+  color: white;
 }
 
 /*input button*/
@@ -89,7 +89,8 @@ button > img:hover {
 section#message-input-section div.destination{
   position: fixed;
   bottom: 6%;
-  right: 40%
+  right: 40%;
+  color: white;
 }
 
 section#message-input-section div.destination p {
@@ -120,9 +121,9 @@ div.chat div {
   overflow: auto;
   margin: 10px;
   float: left;
-  border-bottom: 1px solid #2d433c;
-  border-right: 1px solid #4a6b61;
-  border-left: 1px solid #66857b;
+  border-bottom: 2px solid #f5f500;
+  border-right: 2px solid #f1f180;
+  border-left: 1px solid #ffffff;
 }
 
 div.chat img.avatar {
@@ -160,7 +161,7 @@ div.menu {
   background: var(--main-div-menu);
   height: 100%;
   width: 30%;
-  border-left: 1px solid #9fd4d8;
+  border-left: 2px solid #b8b4b4;
 }
 
 /*avatar section*/
@@ -212,9 +213,8 @@ input#find:focus {
 
 /*contacts*/
 div#contacts {
-  border-bottom-left-radius: 5%;
   background-color: var(--main-msg-bg-color);
-  border-left: 1px solid #918e8e;
+  border-bottom: 2px solid #d7cc27; 
 }
 
 div.contact {
@@ -222,8 +222,6 @@ div.contact {
   cursor: pointer;
   height: 90px;
   margin: 0;
-  border-bottom: 1px solid #807d7d;
-  border-bottom-left-radius: 5%;
 }
 
 div.contact p {
@@ -232,5 +230,5 @@ div.contact p {
 }
 
 div.contact:hover {
-  background-color:  #f3bcdc;
+  background-color:  var(--main-bg-color);
 }
