@@ -15,10 +15,17 @@ document.addEventListener('DOMContentLoaded', () => {
 
   //saving all-chat to contacts
   listeners.addToContactList('All', allChat);
+  listeners.showAllChat();
 
   //handling contact for all-chat
   allChat.addEventListener('click', () => {
     listeners.showAllChat();
+  });
+  allChat.addEventListener('mouseover', () => {
+    allChat.style.backgroundColor = '#f3bcdc';
+  });
+  allChat.addEventListener('mouseout', () => {
+    listeners.mouseOut(allChat, 'All');
   });
 
   //handling nickname input

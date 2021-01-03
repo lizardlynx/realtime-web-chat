@@ -115,6 +115,13 @@ class Listeners {
         contact.appendChild(p);
         chat = this.selectContact(contact, u1Id);
         contactsSection.appendChild(contact);
+        contact.addEventListener('mouseover', () => {
+          contact.style.backgroundColor = '#f3bcdc';
+        });
+
+        contact.addEventListener('mouseout', () => {
+          this.mouseOut(contact, u1Id);
+        });
 
         contact.addEventListener('click', () => {
           this.openedChat = this.contactClick(contact, u1Id, message.name);
@@ -128,7 +135,7 @@ class Listeners {
   onSearchMessage(message) {
     const contactsSection = document.getElementById('contacts');
     for (const user of message.list) {
-      if (user[0] === this.userID) continue;
+      if (user[0] === this.userID || user[1] === 'unknown') continue;
       contactsSection.style.display = 'none';
 
       const contact = document.createElement('div');
@@ -144,9 +151,25 @@ class Listeners {
       const searchResults = document.getElementById('search-results');
       searchResults.appendChild(contact);
 
+      contact.addEventListener('mouseover', () => {
+        contact.style.backgroundColor = '#f3bcdc';
+      });
+
+      contact.addEventListener('mouseout', () => {
+        this.mouseOut(contact, user[0]);
+      });
+
       contact.addEventListener('click', () => {
         this.openedChat = this.contactClick(contact, user[0], user[1]);
       });
+    }
+  }
+
+  //changes color of contact when mouse moves out
+  mouseOut(contact, id) {
+    const chatForContact = this.dialogExists(contact, id);
+    if (this.openedChat !==  chatForContact || chatForContact === null) {
+      contact.style.backgroundColor = '#d0e8f2';
     }
   }
 
@@ -223,6 +246,9 @@ class Listeners {
   contactClick(contact, idfrom, name) {
     this.destinationUser = idfrom;
     document.getElementById('destination').innerHTML = name;
+    if (Object.keys(this.contactList).includes(idfrom)) {
+      contact = this.contactList[idfrom];
+    }
     const contacts = document.getElementsByClassName('contact');
     for (let i = 0; i < contacts.length; i++) {
       contacts[i].style.backgroundColor = '#d0e8f2';
@@ -259,11 +285,18 @@ class Listeners {
     return Math.floor(Math.random() * 10000);
   }
 
-  //returns dialog for communicating with chosen contact
-  // adds contact to contacts
-  selectContact(contact, idto) {
-    document.getElementById('search-results').textContent = '';
+  //returns dialog or false if none
+  dialogExists(contact, id) {
+    const contactNumber = this.getContactNumberByValue(contact);
+    if (contactNumber === null) return null;
+    const chat = document.getElementsByClassName('chat')[contactNumber];
+    console.log(chat, this.contactList[id]);
+    if (this.contactList[id] === contact) return chat;
+    else return null;
+  }
 
+  //get contactNumberBy its value
+  getContactNumberByValue(contact) {
     const contacts = document.getElementsByClassName('contact');
     let contactNumber = null;
     for (let i = 0; i < contacts.length; i++) {
@@ -272,6 +305,15 @@ class Listeners {
         break;
       }
     }
+    return contactNumber;
+  }
+
+  //returns dialog for communicating with chosen contact
+  // adds contact to contacts
+  selectContact(contact, idto) {
+    document.getElementById('search-results').textContent = '';
+
+    const contactNumber = this.getContactNumberByValue(contact);
     let dialog = null;
     if (contactNumber === null) {
       const chatHolder = document.getElementById('chat-holder');

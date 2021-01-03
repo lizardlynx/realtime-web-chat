@@ -97,6 +97,7 @@ class ServerFuncs {
         if (clientName === userToFind) list.push([id, clientName, clientID]);
       }
       const messageToClient = new SearchToClient(list);
+      messageToClient.idto = connection;
       messageToClient.send(ws, connection, null);
     }
   }
