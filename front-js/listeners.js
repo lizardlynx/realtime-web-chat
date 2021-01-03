@@ -135,6 +135,11 @@ class Listeners {
 
   //adds contact based on search results and creates chat for contact
   onSearchMessage(message) {
+    if (!message.expected) {
+      const num = document.getElementById('num');
+      num.innerHTML = message.list;
+      return;
+    }
     const contactsSection = document.getElementById('contacts');
     for (const user of message.list) {
       if (user[0] === this.userID || user[1] === 'unknown') continue;
@@ -240,6 +245,16 @@ class Listeners {
     divMessage.appendChild(p);
     chat.appendChild(divMessage);
     this.scrollToBottom(chat);
+  }
+
+  //change color of online circle
+  changeColor() {
+    const colors = ['green', 'greenyellow'];
+    const onlineCircle = document.getElementById('online');
+    const color = onlineCircle.style.backgroundColor;
+    if (color === colors[0]) {
+      onlineCircle.style.backgroundColor = colors[1];
+    } else onlineCircle.style.backgroundColor = colors[0];
   }
 
   //funcs, which are often used by listeners

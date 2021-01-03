@@ -52,6 +52,15 @@ class ServerFuncs {
     return false;
   }
 
+  //on connections changed
+  onConnection(ws, connection) {
+    let num = 0;
+    ws.clients.forEach(() => num++);
+    const mess = new SearchToClient(num - 1, false);
+    mess.idto = 'All';
+    mess.send(ws, null, connection);
+  }
+
   //handles new message to server
   connectionMessage(ws, connection, message) {
     const messageParsed = JSON.parse(message);
@@ -96,14 +105,14 @@ class ServerFuncs {
         const userToFind = messageParsed.userToFind;
         if (clientName === userToFind) list.push([id, clientName, clientID]);
       }
-      const messageToClient = new SearchToClient(list);
-      messageToClient.idto = connection;
+      const messageToClient = new SearchToClient(list, true);
       messageToClient.send(ws, connection, null);
     }
   }
 
   //handles client leaving
   connectionClose(ws, connection) {
+    this.onConnection(ws, connection);
     for (const [id, client] of Object.entries(this.clients)) {
       const u1Id = id.toString();
       if (client[0] !== connection) continue;

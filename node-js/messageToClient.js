@@ -56,11 +56,15 @@ class TextToClient extends MessageToClient {
 }
 
 class SearchToClient extends MessageToClient {
-  constructor(list) {
+  constructor(list, expected) {
     super();
     this.type = 4;
+    this.idto = 'client';
     this.list = list;
+    this.expected = expected;
   }
 }
 
-module.exports = { InfoToClient, TextToClient, SearchToClient };
+module.exports = { InfoToClient,
+  TextToClient,
+  SearchToClient };

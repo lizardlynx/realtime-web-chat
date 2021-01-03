@@ -12,7 +12,9 @@ document.addEventListener('DOMContentLoaded', () => {
   const changeAva = document.getElementById('change-avatar');
   const searchSection = document.getElementById('find');
   const allChat = document.getElementsByClassName('contact')[0];
+  const inputTip = document.getElementById('input-tip');
 
+  setInterval(() => listeners.changeColor(), 1000);
   //saving all-chat to contacts
   listeners.addToContactList('All', allChat);
   listeners.showAllChat();
@@ -45,6 +47,12 @@ document.addEventListener('DOMContentLoaded', () => {
 
   //send message
   submitButton.addEventListener('click', e => listeners.submitButtonPressed(e));
+  messageInput.addEventListener('focusout', () => {
+    inputTip.style.opacity = '0';
+  });
+  messageInput.addEventListener('focusin', () => {
+    inputTip.style.opacity = '1';
+  });
   messageInput.addEventListener('keydown', e => {
     if (e.code === 'Enter' && e.shiftKey) {
       e.preventDefault();

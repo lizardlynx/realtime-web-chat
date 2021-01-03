@@ -29,7 +29,7 @@ body {
 /*chat-name*/
 div#chat-name {
   font-family: 'chatHeaderFont', 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
-  font-size: 40;
+  font-size: 200%;
   width: 100%;
   height: 5%;
   background-color: var(--main-line-color);
@@ -38,6 +38,28 @@ div#chat-name {
   left: 0;
   padding: 5px;
   color: #000000;
+}
+
+/*number of users online*/
+span#online {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background-color: green;
+  display: inline-block;
+  margin-right: 5px;
+  transition: background-color 0.5s;
+}
+div#num-online {
+  visibility: visible;
+  color: white;
+  position: absolute;
+  top: 6%;
+  right: 35%;
+}
+
+p#num {
+  display: inline;
 }
 
 /*input customizing*/
@@ -66,9 +88,37 @@ section#message-input-section {
 }
 
 /*input button*/
+
 button {
   visibility: hidden;
   cursor: pointer;
+}
+
+div#input-tip {
+  opacity: 0;
+  display: block;
+  position: absolute;
+  cursor: default;
+  left: 25%;
+  top: -50;
+  background-color: rgba(152, 155, 136, 0.19);
+  padding: 1em 3em;
+  color: #ffffff;
+  white-space: nowrap;
+  border-radius: 5px;
+  font-size: .8em;
+  border: 1px solid rgba(252, 163, 17, 0.5);
+  border-bottom-left-radius: 0;
+  transition: opacity 3s;
+}
+
+div#input-tip::after {
+  content: '';
+  border-top: 10px solid rgb(252, 163, 17);
+  border-right: 11px solid transparent;
+  position: absolute;
+  left: -1px;
+  top: 100%;
 }
 
 button > img {
