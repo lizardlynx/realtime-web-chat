@@ -1,6 +1,8 @@
 # realtime-web-chat
 ## Short Description
 University project, which is focused on creating a realtime-web-chat.  
+## IMPORTANT TO KNOW BEFORE USING  
+For demonstration purposes every new tab in browser is an equivalent of a different user.
 ## Concept
 Chat provides possibility to talk to people, who use the same app. Users are able to do that either in group chat, or in separate rooms.
 ## Functionality
