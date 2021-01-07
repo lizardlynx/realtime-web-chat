@@ -57,7 +57,7 @@ class ServerFuncs {
   }
 
   //on connections changed
-  onConnection(ws, connection) {
+  onConnection(ws, connection = null) {
     let num = 0;
     ws.clients.forEach(() => num++);
     const mess = new SearchToClient(num - 1, false);
