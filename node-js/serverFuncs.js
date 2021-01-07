@@ -13,7 +13,6 @@ class ServerFuncs {
       //saved dialogs and clients
       this.clients = {};
       this.dialogs = [];
-      this.updateConnection();
     }
     return ServerFuncs._instance;
   }

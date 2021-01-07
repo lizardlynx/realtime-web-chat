@@ -12,6 +12,7 @@ module.exports = () => 'hello';
 
 
 const serverFuncs = new ServerFuncs();
+serverFuncs.updateConnection();
 // Create an HTTP server
 const server = http.createServer();
 server.on('request', serverFuncs.handleRequest);
