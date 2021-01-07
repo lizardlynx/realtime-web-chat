@@ -310,7 +310,6 @@ class Listeners {
     const contactNumber = this.getContactNumberByValue(contact);
     if (contactNumber === null) return null;
     const chat = document.getElementsByClassName('chat')[contactNumber];
-    console.log(chat, this.contactList[id]);
     if (this.contactList[id] === contact) return chat;
     else return null;
   }
