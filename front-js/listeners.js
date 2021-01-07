@@ -5,13 +5,17 @@
 // eslint-disable-next-line no-unused-vars
 class Listeners {
   constructor(socket) {
-    this.socket = socket;
-    this.userID = this.GenerateID();
-    this.destinationUser = 'All';
-    this.contactList = {};
-    this.openedChat = document.getElementsByClassName('chat')[0];
-    this.chosenContactColor = '#e6e8f2';
-    this.contactColor = '#b3b9d5';
+    if (!Listeners._instance) {
+      Listeners._instance = this;
+      this.socket = socket;
+      this.userID = this.GenerateID();
+      this.destinationUser = 'All';
+      this.contactList = {};
+      this.openedChat = document.getElementsByClassName('chat')[0];
+      this.chosenContactColor = '#e6e8f2';
+      this.contactColor = '#b3b9d5';
+    }
+    return Listeners._instance;
   }
 
   //sends nickname to server
@@ -42,7 +46,6 @@ class Listeners {
       messageToServer.send(this.socket, this.userID);
       const messages = document.getElementsByClassName(this.userID);
       for (let i = 0; i < messages.length; i++) {
-        console.log(messages[i].childNodes);
         messages[i].childNodes[0].src = src;
       }
     }
