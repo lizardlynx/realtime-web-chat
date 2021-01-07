@@ -57,7 +57,7 @@ class ServerFuncs {
   }
 
   //on connections changed
-  onConnection(ws, connection = null) {
+  onConnection(ws, connection) {
     let num = 0;
     ws.clients.forEach(() => num++);
     const mess = new SearchToClient(num - 1, false);
@@ -152,6 +152,7 @@ class ServerFuncs {
       else return { id: u2Id, connection: client };
     }
   }
+
 }
 
 module.exports = { ServerFuncs };

@@ -3,6 +3,7 @@
 const ServerFuncs = require('./node-js/serverFuncs').ServerFuncs;
 const http = require('http');
 const WebSocket = require('ws');
+//const mysql = require('mysql');
 
 //create and start chat server
 
@@ -11,7 +12,6 @@ module.exports = () => 'hello';
 
 
 const serverFuncs = new ServerFuncs();
-
 // Create an HTTP server
 const server = http.createServer();
 server.on('request', serverFuncs.handleRequest);
