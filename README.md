@@ -1,6 +1,7 @@
 # realtime-web-chat
 ## Short Description
 University project, which is focused on creating a realtime-web-chat.  
+Now posted [here](https://realtime-web-chat.herokuapp.com/)!
 ## IMPORTANT TO KNOW BEFORE USING  
 For demonstration purposes every new tab in browser is an equivalent of a different user.
 ## Concept
