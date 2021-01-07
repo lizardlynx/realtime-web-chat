@@ -1,7 +1,7 @@
 'use strict';
 
 document.addEventListener('DOMContentLoaded', () => {
-  const socket = new WebSocket('ws://localhost:8000/');
+  const socket = new WebSocket('wss://realtime-web-chat.herokuapp.com');
   // eslint-disable-next-line no-undef
   const listeners = new Listeners(socket);
 
