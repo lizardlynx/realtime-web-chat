@@ -24,5 +24,8 @@
   "devDependencies": {
     "eslint": "^7.16.0",
     "mocha": "^8.2.1"
+  },
+  "dependencies": {
+    "ws": "^7.4.2"
   }
 }
