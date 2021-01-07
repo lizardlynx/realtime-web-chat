@@ -155,10 +155,10 @@ class ServerFuncs {
 
   //sends info to clients every 50 secs //needed for heroku
   updateConnection() {
-    const listeners = this;
+    //const listeners = this;
     console.log('update');
     setInterval(() => {
-      listeners.onConnection();
+      //listeners.onConnection();
       console.log('update');
     }, 5000);
   }
