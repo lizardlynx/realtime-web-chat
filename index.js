@@ -7,6 +7,10 @@ const WebSocket = require('ws');
 
 //create and start chat server
 
+
+module.exports = () => 'hello';
+
+
 const serverFuncs = new ServerFuncs();
 // Create an HTTP server
 const server = http.createServer();
