@@ -8,9 +8,13 @@ const InfoToClient = messageToClient.InfoToClient;
 
 class ServerFuncs {
   constructor() {
-    //saved dialogs and clients
-    this.clients = {};
-    this.dialogs = [];
+    if (!ServerFuncs._instance) {
+      ServerFuncs._instance = this;
+      //saved dialogs and clients
+      this.clients = {};
+      this.dialogs = [];
+    }
+    return ServerFuncs._instance;
   }
 
   //handle request in http server
@@ -53,7 +57,7 @@ class ServerFuncs {
   }
 
   //on connections changed
-  onConnection(ws, connection) {
+  onConnection(ws, connection = null) {
     let num = 0;
     ws.clients.forEach(() => num++);
     const mess = new SearchToClient(num - 1, false);

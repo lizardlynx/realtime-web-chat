@@ -22,6 +22,7 @@ server.listen(8000, () => {
 //create websocket
 const ws = new WebSocket.Server({ server });
 ws.on('connection', connection => {
+  setInterval(() => serverFuncs.onConnection(ws), 5000);
   serverFuncs.onConnection(ws, connection);
   //message from client
   connection.on('message', mess => {
