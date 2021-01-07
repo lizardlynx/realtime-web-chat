@@ -152,17 +152,6 @@ class ServerFuncs {
       else return { id: u2Id, connection: client };
     }
   }
-
-  //sends info to clients every 50 secs //needed for heroku
-  updateConnection() {
-    //const listeners = this;
-    console.log('update');
-    setInterval(() => {
-      //listeners.onConnection();
-      console.log('update');
-    }, 5000);
-  }
-
 }
 
 module.exports = { ServerFuncs };
