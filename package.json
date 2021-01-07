@@ -8,6 +8,7 @@
     "test": "mocha",
     "start": "node index.js"
   },
+  "engines" : { "node" : ">=0.12" },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/lizardlynx/realtime-web-chat.git"
