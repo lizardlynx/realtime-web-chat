@@ -5,8 +5,11 @@
   "main": "index.js",
   "scripts": {
     "lint": "eslint",
-    "test": "mocha",
-    "start": "node index.js"
+    "start": "node index.js",
+    "test": "mocha --recursive"
+  },
+  "standard": {
+  "env": [ "mocha" ]
   },
   "engines" : { "node" : ">=0.12" },
   "repository": {

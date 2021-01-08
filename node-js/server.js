@@ -1,20 +1,51 @@
 'use strict';
 
+const http = require('http');
+const WebSocket = require('ws');
 const FileManager = require('./fileManager').FileManager;
 const messageToClient = require('./messageToClient');
 const TextToClient = messageToClient.TextToClient;
 const SearchToClient = messageToClient.SearchToClient;
 const InfoToClient = messageToClient.InfoToClient;
 
-class ServerFuncs {
+class Server {
   constructor() {
-    if (!ServerFuncs._instance) {
-      ServerFuncs._instance = this;
+    if (!Server._instance) {
+      Server._instance = this;
       //saved dialogs and clients
       this.clients = {};
       this.dialogs = [];
+      this.server = http.createServer();
+      this.server.on('request', this.handleRequest);
+      this.server.listen(process.env.PORT || 8000, () => {
+        console.log('Server running (on port 8000)...');
+      });
     }
-    return ServerFuncs._instance;
+    return Server._instance;
+  }
+
+  //close server
+  close() {
+    this.server.close();
+    Server._instance = null;
+  }
+
+  //create websocket
+  upgradeServer() {
+    const server = this.server;
+    const ws = new WebSocket.Server({ server });
+    this.ws = ws;
+    setInterval(() => this.onConnection(ws), 5000);
+    this.ws.on('connection', connection => {
+      this.onConnection(connection);
+      //message from client
+      connection.on('message', mess => {
+        this.connectionMessage(connection, mess);
+      });
+
+      //client leaves
+      connection.on('close', () => this.connectionClose(connection));
+    });
   }
 
   //handle request in http server
@@ -51,13 +82,20 @@ class ServerFuncs {
   dialogExists(user1, user2) {
     const dialogs = this.dialogs;
     for (let i = 0; i < dialogs.length; i++) {
+      if (typeof user1 !== 'string' && typeof user1 !== 'number') return false;
+      if (typeof user2 !== 'string' && typeof user2 !== 'number') return false;
+      if (typeof user1 !== 'string' || typeof user2 !== 'string') {
+        user1 = user1.toString();
+        user2 = user2.toString();
+      }
       if (dialogs[i].includes(user1) && dialogs[i].includes(user2)) return true;
     }
     return false;
   }
 
   //on connections changed
-  onConnection(ws, connection = null) {
+  onConnection(connection = null) {
+    const ws = this.ws;
     let num = 0;
     ws.clients.forEach(() => num++);
     const mess = new SearchToClient(num - 1, false);
@@ -66,7 +104,8 @@ class ServerFuncs {
   }
 
   //handles new message to server
-  connectionMessage(ws, connection, message) {
+  connectionMessage(connection, message) {
+    const ws = this.ws;
     const messageParsed = JSON.parse(message);
     const type = messageParsed.type;
     const id = messageParsed.id;
@@ -115,8 +154,9 @@ class ServerFuncs {
   }
 
   //handles client leaving
-  connectionClose(ws, connection) {
-    this.onConnection(ws, connection);
+  connectionClose(connection) {
+    this.onConnection(connection);
+    const ws = this.ws;
     for (const [id, client] of Object.entries(this.clients)) {
       const u1Id = id.toString();
       if (client[0] !== connection) continue;
@@ -152,7 +192,6 @@ class ServerFuncs {
       else return { id: u2Id, connection: client };
     }
   }
-
 }
 
-module.exports = { ServerFuncs };
+module.exports = { Server };

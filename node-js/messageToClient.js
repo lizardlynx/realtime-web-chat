@@ -65,6 +65,7 @@ class SearchToClient extends MessageToClient {
   }
 }
 
-module.exports = { InfoToClient,
+module.exports = { MessageToClient,
+  InfoToClient,
   TextToClient,
   SearchToClient };
