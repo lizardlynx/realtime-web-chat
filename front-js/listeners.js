@@ -135,9 +135,7 @@ class Listeners {
           this.mouseOut(contact, u1Id);
         });
 
-        contact.addEventListener('click', () => {
-          this.openedChat = this.contactClick(contact, u1Id, message.name);
-        });
+        this.addEventListClick(contact, u1Id, message.name);
       }
     }
     this.sendMessage(chat, message, message.idfrom);
@@ -176,10 +174,18 @@ class Listeners {
         this.mouseOut(contact, user[0]);
       });
 
-      contact.addEventListener('click', () => {
-        this.openedChat = this.contactClick(contact, user[0], user[1]);
-      });
+      this.addEventListClick(contact, user[0], user[1]);
     }
+  }
+
+  //changes current chat
+  addEventListClick(contact, id, name) {
+    contact.removeEventListener('click', onclick);
+    const listeners = this;
+    function onclick() {
+      listeners.openedChat = listeners.contactClick(contact, id, name);
+    }
+    contact.addEventListener('click', onclick);
   }
 
   //changes color of contact when mouse moves out
@@ -198,7 +204,6 @@ class Listeners {
     const info = message.info;
     const contact = this.contactList[id];
     if (type === 2) {
-      console.log(2);
       if (contact) contact.childNodes[0].src = info;
       const messages = document.getElementsByClassName(id);
       for (let i = 0; i < messages.length; i++) {
@@ -206,9 +211,13 @@ class Listeners {
       }
     } else if (type === 1) {
       if (this.userID === id) return;
-      console.log(1);
-      if (contact) contact.childNodes[1].innerHTML = info;
-      document.getElementById('destination').innerHTML = info;
+      if (contact) {
+        contact.childNodes[1].innerHTML = info;
+        this.addEventListClick(contact, id, info);
+        if (this.openedChat === this.selectContact(contact, id)) {
+          document.getElementById('destination').innerHTML = info;
+        }
+      }
       const messages = document.getElementsByClassName(id);
       for (let i = 0; i < messages.length; i++) {
         messages[i].childNodes[2].childNodes[0].innerHTML = info;
