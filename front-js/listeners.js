@@ -11,6 +11,12 @@ class Listeners {
       this.userID = this.GenerateID();
       this.destinationUser = 'All';
       this.contactList = {};
+      const listeners = this;
+      this.messageTypes = {
+        1: m => listeners.onChangeInfo(m),
+        3: m => listeners.onTextMessage(m),
+        4: m => listeners.onSearchMessage(m)
+      };
       this.openedChat = document.getElementsByClassName('chat')[0];
       this.chosenContactColor = '#e6e8f2';
       this.contactColor = '#b3b9d5';
@@ -95,7 +101,8 @@ class Listeners {
     const contactsSection = document.getElementById('contacts');
     let chat = null;
     const u1Id = message.idfrom;
-    if (u1Id === this.userID.toString()) {
+    const uID = this.userID.toString();
+    if (u1Id === uID) {
       message.name = 'You';
       chat = this.openedChat;
     } else if (message.idto === 'All') {
@@ -184,19 +191,23 @@ class Listeners {
   }
 
   //handles change info of another user
-  onChangeInfo(message) {
+  onChangeInfo(mess) {
+    const message = mess.message;
     const id = message.id;
     const type = message.type;
     const info = message.info;
     const contact = this.contactList[id];
-    if (contact && type === 2) {
-      contact.childNodes[0].src = info;
+    if (type === 2) {
+      console.log(2);
+      if (contact) contact.childNodes[0].src = info;
       const messages = document.getElementsByClassName(id);
       for (let i = 0; i < messages.length; i++) {
         messages[i].childNodes[0].src = info;
       }
-    } else if (contact && type === 1) {
-      contact.childNodes[1].innerHTML = info;
+    } else if (type === 1) {
+      if (this.userID === id) return;
+      console.log(1);
+      if (contact) contact.childNodes[1].innerHTML = info;
       document.getElementById('destination').innerHTML = info;
       const messages = document.getElementsByClassName(id);
       for (let i = 0; i < messages.length; i++) {
@@ -209,9 +220,7 @@ class Listeners {
   onSocketMessage(event) {
     const messageFromServer = event.data;
     const message = JSON.parse(messageFromServer);
-    if (message.type === 1) this.onChangeInfo(message.message);
-    else if (message.type === 3) this.onTextMessage(message);
-    else if (message.type === 4) this.onSearchMessage(message);
+    this.messageTypes[message.type](message);
   }
 
   //function for sending messages to chat
