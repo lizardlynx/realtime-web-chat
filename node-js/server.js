@@ -26,6 +26,11 @@ class Server {
 
   //close server
   close() {
+    this.ws.clients.forEach(client => {
+      if (client.readyState === WebSocket.OPEN) {
+        client.close();
+      }
+    });
     this.server.close();
     Server._instance = null;
   }
@@ -35,7 +40,7 @@ class Server {
     const server = this.server;
     const ws = new WebSocket.Server({ server });
     this.ws = ws;
-    setInterval(() => this.onConnection(ws), 5000);
+    setInterval(() => this.onConnection(), 5000);
     this.ws.on('connection', connection => {
       this.onConnection(connection);
       //message from client
